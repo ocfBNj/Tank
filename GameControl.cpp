@@ -7,6 +7,7 @@ GameControl::GameControl() :
 	playerBullet(new Bullet), hit(*map)
 {
 	addEnemy();
+	addEnemy();
 
 }
 
@@ -38,16 +39,14 @@ void GameControl::gameLoop() {
 
 		/**************************************************************************************************************/
 
-		//移动敌方坦克并发射子弹
+		//移动敌方坦克并发射,移动子弹
 		for (auto& enemy : enemies) {
 			enemy.first->move();
 			hit.canGo(enemy.first->x, enemy.first->y, enemy.first->dir);
 			enemy.first->show();
 			enemy.second->shoot(enemy.first->x, enemy.first->y, enemy.first->dir, true);
-		}
 
-		//移动敌方坦克子弹
-		for (auto& enemy : enemies) {
+			//移动子弹
 			if (enemy.second->exist) {
 				if (hit.dection(enemy.second->x, enemy.second->y, 12, 12)) {
 					enemy.second->clearOld();
