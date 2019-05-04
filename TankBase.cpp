@@ -3,7 +3,7 @@
 TankBase::TankBase(int _x, int _y, Dir d, int s, int b) :
 	x(_x), y(_y), dir(d),
 	auto_flag(false), speed(s),
-	cur_shape(0), blood(b) {}
+	cur_shape(0), blood(b), steep(0){}
 
 void TankBase::changeShape() {
 	if (cur_shape)
@@ -13,7 +13,6 @@ void TankBase::changeShape() {
 }
 
 void TankBase::auto_move() {
-	static int steep = 0;
 	t.stop();
 	if (auto_flag && t.times() >= 6) {
 		t.start();

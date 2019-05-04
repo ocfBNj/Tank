@@ -59,7 +59,7 @@ int HitDection::focus(std::shared_ptr<TankBase> & pl_tank,
 {
 	//判断玩家的子弹是否击中敌人
 	for (auto enemy = enemies.begin(); enemy != enemies.end(); enemy++) {
-		if (isIntersect(pl_blt->x, pl_blt->y, 12, 12, enemy->first->x, enemy->first->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
+		if (pl_blt->exist && isIntersect(pl_blt->x, pl_blt->y, 12, 12, enemy->first->x, enemy->first->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
 			//掉血
 			enemy->first->blood--;
 			//清理子弹

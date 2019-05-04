@@ -25,7 +25,7 @@ class Bullet {
 inline
 Bullet::Bullet() :
 	x(0), y(0), dir(UP),
-	speed(1), exist(false)
+	speed(2), exist(false)
 {
 	loadimage(&img_bullet[LEFT], _T(".\\res\\image\\bullet-0.gif"));
 	loadimage(&img_bullet[UP], _T(".\\res\\image\\bullet-1.gif"));
@@ -83,28 +83,28 @@ bool Bullet::move() {
 	switch (dir) {
 	case UP:
 		//≈–∂œ «∑Ò≈ˆµΩ±ﬂΩÁ
-		if (y <= CENTER_Y) {
+		if (y - 4 <= CENTER_Y) {
 			exist = false;//±¨’®
 			return true;
 		}
 		y -= speed;
 		break;
 	case DOWN:
-		if (y + 12 >= CENTER_Y + CENTER_HEIGHT) {
+		if (y + 16 >= CENTER_Y + CENTER_HEIGHT) {
 			exist = false;
 			return true;
 		}
 		y += speed;
 		break;
 	case LEFT:
-		if (x <= CENTER_X) {
+		if (x - 4 <= CENTER_X) {
 			exist = false;
 			return true;
 		}
 		x -= speed;
 		break;
 	case RIGHT:
-		if (x + 12 >= CENTER_X + CENTER_WIDTH) {
+		if (x + 16 >= CENTER_X + CENTER_WIDTH) {
 			exist = false;
 			return true;
 		}

@@ -4,8 +4,9 @@ GameControl::GameControl() :
 	map(new Map),
 	playerTank(new PlayerTank(
 		CENTER_X + 8 * BLOCK_SIZE, CENTER_Y + 24 * BLOCK_SIZE)),
-	playerBullet(new Bullet), hit(*map)
+	playerBullet(new Bullet), hit(*map), enemies_total(20)
 {
+	addEnemy();
 	addEnemy();
 	addEnemy();
 
@@ -14,7 +15,7 @@ GameControl::GameControl() :
 void GameControl::gameLoop() {
 	soundManager.playMusic(START);//播放开始游戏音乐
 
-	while (true) {
+	while (enemies_total) {
 		//移动玩家
 		playerTank->move();
 		hit.canGo(playerTank->x, playerTank->y, playerTank->dir);
@@ -44,8 +45,11 @@ void GameControl::gameLoop() {
 			enemy.first->move();
 			hit.canGo(enemy.first->x, enemy.first->y, enemy.first->dir);
 			enemy.first->show();
-			enemy.second->shoot(enemy.first->x, enemy.first->y, enemy.first->dir, true);
-
+			t.stop();
+			if (!enemy.second->exist && t.times() >= 500) {
+				enemy.second->shoot(enemy.first->x, enemy.first->y, enemy.first->dir, true);
+				t.start();
+			}
 			//移动子弹
 			if (enemy.second->exist) {
 				if (hit.dection(enemy.second->x, enemy.second->y, 12, 12)) {
@@ -58,7 +62,10 @@ void GameControl::gameLoop() {
 		/**************************************************************************************************************/
 
 		//判断子弹与坦克是否相撞
-		hit.focus(playerTank, playerBullet, enemies);
+		if (hit.focus(playerTank, playerBullet, enemies) == 1) {
+			enemies_total--;
+			addEnemy();
+		}
 
 		//更新地图
 		map->showMap();
@@ -68,8 +75,10 @@ void GameControl::gameLoop() {
 }
 
 void GameControl::addEnemy() {
-	std::shared_ptr<TankBase> tank(new EnemyTank(CENTER_X, CENTER_Y, ORDINARY));
+	static size_t id = 0;
+	std::shared_ptr<TankBase> tank(new EnemyTank(CENTER_X + id % 3 * 12 * BLOCK_SIZE, CENTER_Y, (EnemyType)(rand() % 4)));
 	std::shared_ptr<Bullet> bullet(new Bullet);
 	std::pair<std::shared_ptr<TankBase>, std::shared_ptr<Bullet>> enemy(tank, bullet);
 	enemies.push_back(enemy);
+	++id;
 }

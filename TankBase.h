@@ -22,6 +22,7 @@ protected:
 	int speed;                        //坦克速度
 	int cur_shape;                    //当前造型
 	int blood;                        //坦克血量
+	int steep;                        //自动移动时每一步的距离
 	Timer t;                          //计时器
 };
 

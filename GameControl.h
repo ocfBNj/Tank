@@ -28,4 +28,5 @@ private:
 	SoundManager soundManager;                            //管理声音
 	Timer t;
 	void addEnemy();                                      //增加一辆敌方坦克
+	size_t enemies_total;                                 //敌方坦克总数
 };
