@@ -11,7 +11,7 @@ class Bullet {
 	Bullet();
 
 	void clearOld();                           //清除当前位置的图片
-	bool shoot(int _x, int _y, Dir d, bool b);         //发射子弹
+	bool shoot(int _x, int _y, Dir d, bool b); //发射子弹
 	bool move();                               //移动子弹
 
 	IMAGE img_bullet[4];                       //子弹图片

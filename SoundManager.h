@@ -6,7 +6,8 @@
 
 enum Music {
 	START, SHOOT, BK,
-	BIN, MOVE
+	BIN, MOVE, ENEMY_DIE,
+	PLAYER_DIE
 };
 
 class SoundManager {
@@ -19,6 +20,9 @@ public:
 		mciSendString(_T("open .\\res\\music\\shoot.wav alias shoot"), NULL, 0, NULL);
 		mciSendString(_T("open .\\res\\music\\bin.wav alias bin"), NULL, 0, NULL);
 		mciSendString(_T("open .\\res\\music\\player_move.wav alias move"), NULL, 0, NULL);
+		mciSendString(_T("open .\\res\\music\\enemy-bomb.wav alias enemy_die"), NULL, 0, NULL);
+		mciSendString(_T("open .\\res\\music\\player_bomb.wav alias player_die"), NULL, 0, NULL);
+
 	}
 	~SoundManager() {
 		mciSendString(_T("close all"), NULL, 0, NULL);
@@ -47,6 +51,16 @@ public:
 			mciSendString(_T("close move"), NULL, 0, NULL);
 			mciSendString(_T("open .\\res\\music\\player_move.wav alias move"), NULL, 0, NULL);
 			mciSendString(_T("play move"), NULL, 0, NULL);
+		}
+		else if (m == ENEMY_DIE)
+		{
+			mciSendString(_T("close enemy_die"), NULL, 0, NULL);
+			mciSendString(_T("open .\\res\\music\\enemy-bomb.wav alias enemy_die"), NULL, 0, NULL);
+			mciSendString(_T("play enemy_die"), NULL, 0, NULL);
+		}
+		else if (m == PLAYER_DIE)
+		{
+			mciSendString(_T("play player_die"), NULL, 0, NULL);
 		}
 	}
 };

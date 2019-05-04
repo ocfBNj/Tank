@@ -19,11 +19,19 @@ class HitDection
 		int x1, int y1, int w1, int h1,
 		int x2, int y2, int w2, int h2);
 	bool dection(int x, int y, int w, int h);      //判断子弹是否与墙相撞
-	void canGo(int& x, int& y, Dir d);             //判断坦克能不能走
+	void canGo(std::shared_ptr<TankBase>);         //判断坦克能不能走
+
+	void player_dection(std::shared_ptr<TankBase>, //判断玩家撞墙和撞敌人
+		std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>>&);
+
+	void enemy_dection(std::shared_ptr<TankBase>,  //判断敌人撞墙,撞敌人,撞玩家
+		std::shared_ptr<TankBase>,
+		std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>>&);
+
 	int focus(                                     //判断子弹是否击中坦克
 		std::shared_ptr<TankBase>&,
 		std::shared_ptr<Bullet>&,
-		std::list<std::pair<std::shared_ptr<TankBase>,std::shared_ptr<Bullet>>>&);
+		std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>>&);
 
 	Map& map;                                      //地图
 	int map_x, map_y;                              //比较相撞时地图的左上角坐标

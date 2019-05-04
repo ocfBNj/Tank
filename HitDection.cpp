@@ -31,9 +31,9 @@ bool HitDection::dection(int x, int y, int w, int h) {
 	return flag;
 }
 
-void HitDection::canGo(int& x, int& y, Dir d)
+void HitDection::canGo(std::shared_ptr<TankBase> tank)
 {
-	//两个矩形是否相交
+	//判断是否撞墙
 	for (int i = 0; i < 26; i++) {
 		for (int j = 0; j < 26; j++) {
 			if (map.map[i][j] == '0') continue;
@@ -41,11 +41,11 @@ void HitDection::canGo(int& x, int& y, Dir d)
 			map_x = j * BLOCK_SIZE + CENTER_X;
 			map_y = i * BLOCK_SIZE + CENTER_Y;
 
-			if (isIntersect(map_x, map_y, BLOCK_SIZE, BLOCK_SIZE, x, y, BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
-				if (d == UP) y += 1;
-				else if (d == DOWN)y -= 1;
-				else if (d == LEFT) x += 1;
-				else if (d == RIGHT) x -= 1;
+			if (isIntersect(map_x, map_y, BLOCK_SIZE, BLOCK_SIZE, tank->x, tank->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
+				if (tank->dir == UP) tank->y += tank->speed;
+				else if (tank->dir == DOWN)tank->y -= tank->speed;
+				else if (tank->dir == LEFT) tank->x += tank->speed;
+				else if (tank->dir == RIGHT) tank->x -= tank->speed;
 
 				return;
 			}
@@ -53,12 +53,58 @@ void HitDection::canGo(int& x, int& y, Dir d)
 	}
 }
 
+void HitDection::player_dection(std::shared_ptr<TankBase> player,
+	std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>> & enemies)
+{
+	canGo(player);
+	for (auto& enemy : enemies) {
+		if (isIntersect(player->x, player->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2,
+			enemy.first->x, enemy.first->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
+			if (player->dir == UP) player->y += player->speed;
+			else if (player->dir == DOWN)player->y -= player->speed;
+			else if (player->dir == LEFT) player->x += player->speed;
+			else if (player->dir == RIGHT) player->x -= player->speed;
+			return;
+		}
+	}
+}
+
+void HitDection::enemy_dection(std::shared_ptr<TankBase> enemy, std::shared_ptr<TankBase> player,
+	std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>> & enemies)
+{
+	canGo(enemy);
+	//判断是否撞到玩家
+	if (isIntersect(player->x, player->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2,
+		enemy->x, enemy->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2))
+	{
+		if (enemy->dir == UP) enemy->y += enemy->speed;
+		else if (enemy->dir == DOWN)enemy->y -= enemy->speed;
+		else if (enemy->dir == LEFT) enemy->x += enemy->speed;
+		else if (enemy->dir == RIGHT) enemy->x -= enemy->speed;
+		return;
+	}
+	//判断是否撞到敌人
+	for (auto& tank : enemies) {
+		if (enemy == tank.first) continue;
+		if (isIntersect(enemy->x, enemy->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2,
+			tank.first->x, tank.first->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2))
+		{
+			if (enemy->dir == UP) enemy->y += enemy->speed;
+			else if (enemy->dir == DOWN)enemy->y -= enemy->speed;
+			else if (enemy->dir == LEFT) enemy->x += enemy->speed;
+			else if (enemy->dir == RIGHT) enemy->x -= enemy->speed;
+			return;
+		}
+	}
+}
+
 int HitDection::focus(std::shared_ptr<TankBase> & pl_tank,
 	std::shared_ptr<Bullet> & pl_blt,
-	std::list<std::pair<std::shared_ptr<TankBase>, std::shared_ptr<Bullet>>> & enemies)
+	std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>> & enemies)
 {
-	//判断玩家的子弹是否击中敌人
+
 	for (auto enemy = enemies.begin(); enemy != enemies.end(); enemy++) {
+		//判断玩家的子弹是否击中敌人
 		if (pl_blt->exist && isIntersect(pl_blt->x, pl_blt->y, 12, 12, enemy->first->x, enemy->first->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
 			//掉血
 			enemy->first->blood--;
@@ -72,6 +118,10 @@ int HitDection::focus(std::shared_ptr<TankBase> & pl_tank,
 				enemies.erase(enemy);
 			}
 			return 1;
+		}
+		//判断敌人的子弹是否击中玩家
+		if (enemy->second->exist && isIntersect(enemy->second->x, enemy->second->y, 12, 12, pl_tank->x, pl_tank->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
+			return 2;
 		}
 	}
 	return 0;

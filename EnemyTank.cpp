@@ -50,7 +50,6 @@ EnemyTank::EnemyTank(int x, int y, EnemyType t) :
 
 
 void EnemyTank::move() {
-	changeDir();
 	move_timer.stop();
 	if (move_timer.times() >= 10) {
 		auto_flag = true;
@@ -66,10 +65,31 @@ void EnemyTank::show() {
 	}
 }
 
-void EnemyTank::changeDir() {
+void EnemyTank::changeDir(int _x, int _y) {
 	dir_timer.stop();
-	if (dir_timer.times() >= 2000) {
-		dir = (Dir)(rand() % 4);
+	if (dir_timer.times() >= 1000) {
+		if (_x < x) {//玩家在敌方坦克的左边
+			if (_y < y) {//左上
+				if (rand() % 2)	dir = UP;
+				else dir = LEFT;
+			}
+			else {//左下
+				if (rand() % 2)	dir = DOWN;
+				else dir = LEFT;
+			}
+		}
+		else {
+			if (_y < y) {//右上
+				if (rand() % 2)	dir = UP;
+				else dir = RIGHT;
+			}
+			else {//右下
+				if (rand() % 2)	dir = DOWN;
+				else dir = RIGHT;
+			}
+		}
+
+
 		dir_timer.start();
 	}
 }

@@ -14,7 +14,7 @@ void TankBase::changeShape() {
 
 void TankBase::auto_move() {
 	t.stop();
-	if (auto_flag && t.times() >= 6) {
+	if (auto_flag && t.times() >= 5) {
 		t.start();
 		steep++;
 		if (steep == BLOCK_SIZE) {
