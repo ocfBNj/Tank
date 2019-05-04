@@ -1,0 +1,118 @@
+#pragma once
+
+#include <graphics.h>
+#include <Windows.h>
+#include "struct.h"
+#include "Timer.h"
+
+class Bullet {
+	friend class GameControl;
+	friend class HitDection;
+	Bullet();
+
+	void clearOld();                           //清除当前位置的图片
+	bool shoot(int _x, int _y, Dir d, bool b);         //发射子弹
+	bool move();                               //移动子弹
+
+	IMAGE img_bullet[4];                       //子弹图片
+	int x, y;                                  //子弹（左上角）坐标
+	Dir dir;                                   //方向
+	int speed;                                 //子弹速度
+	bool exist;                                //子弹是否存在
+	Timer t;                                   //记时器
+};
+
+inline
+Bullet::Bullet() :
+	x(0), y(0), dir(UP),
+	speed(1), exist(false)
+{
+	loadimage(&img_bullet[LEFT], _T(".\\res\\image\\bullet-0.gif"));
+	loadimage(&img_bullet[UP], _T(".\\res\\image\\bullet-1.gif"));
+	loadimage(&img_bullet[RIGHT], _T(".\\res\\image\\bullet-2.gif"));
+	loadimage(&img_bullet[DOWN], _T(".\\res\\image\\bullet-3.gif"));
+}
+
+inline
+void Bullet::clearOld() {
+	clearrectangle(x, y, x + 12, y + 12);//清除原位置
+}
+
+inline
+bool Bullet::shoot(int _x, int _y, Dir d, bool b) {
+	//子弹已经存在
+	if (exist)return false;
+
+	//按下空格或是敌人, 发射子弹
+	if (GetAsyncKeyState(' ') & 0x8000 || b) {
+		switch (d)//根据坦克方向发射子弹
+		{
+		case UP:
+			x = _x + 18;
+			y = _y + 2;
+			break;
+		case DOWN:
+			x = _x + 18;
+			y = _y + BLOCK_SIZE;
+			break;
+		case LEFT:
+			x = _x + 2;
+			y = _y + 20;
+			break;
+		case RIGHT:
+			x = _x + BLOCK_SIZE;
+			y = _y + 20;
+			break;
+		default:
+			break;
+		}
+		dir = d;           //子弹方向与发射子弹时坦克方向一致
+		exist = true;      //子弹存在
+		return true;
+	}
+	return false;
+}
+
+inline
+bool Bullet::move() {
+	//子弹不存在
+	if (!exist)
+		return false;
+
+	clearOld();//清理旧位置图
+	switch (dir) {
+	case UP:
+		//判断是否碰到边界
+		if (y <= CENTER_Y) {
+			exist = false;//爆炸
+			return true;
+		}
+		y -= speed;
+		break;
+	case DOWN:
+		if (y + 12 >= CENTER_Y + CENTER_HEIGHT) {
+			exist = false;
+			return true;
+		}
+		y += speed;
+		break;
+	case LEFT:
+		if (x <= CENTER_X) {
+			exist = false;
+			return true;
+		}
+		x -= speed;
+		break;
+	case RIGHT:
+		if (x + 12 >= CENTER_X + CENTER_WIDTH) {
+			exist = false;
+			return true;
+		}
+		x += speed;
+		break;
+	default:
+		break;
+	}
+	transparentimage(NULL, x, y, &img_bullet[dir], 0xffc4c4);
+	return false;
+}
