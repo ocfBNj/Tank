@@ -23,8 +23,7 @@ class HitDection
 	int focus(                                     //判断子弹是否击中坦克
 		std::shared_ptr<TankBase>&,
 		std::shared_ptr<Bullet>&,
-		std::list<std::shared_ptr<TankBase>>&,
-		std::list<std::shared_ptr<Bullet>>&);
+		std::list<std::pair<std::shared_ptr<TankBase>,std::shared_ptr<Bullet>>>&);
 
 	Map& map;                                      //地图
 	int map_x, map_y;                              //比较相撞时地图的左上角坐标

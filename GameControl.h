@@ -22,8 +22,8 @@ private:
 	std::shared_ptr<Map> map;                             //地图
 	std::shared_ptr<TankBase> playerTank;                 //玩家
 	std::shared_ptr<Bullet> playerBullet;                 //玩家子弹
-	std::list<std::shared_ptr<TankBase>> enemiesTank;     //敌人列表
-	std::list<std::shared_ptr<Bullet>> enemiesBullet;     //敌人子弹列表
+	std::list<std::pair<std::shared_ptr<TankBase>,        //敌人
+		std::shared_ptr<Bullet>>> enemies;
 	HitDection hit;                                       //碰撞检测
 	SoundManager soundManager;                            //管理声音
 	Timer t;

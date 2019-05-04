@@ -12,8 +12,6 @@ GameControl::GameControl() :
 
 void GameControl::gameLoop() {
 	soundManager.playMusic(START);//播放开始游戏音乐
-	auto enemy_beg = enemiesTank.begin();
-	auto blt_beg = enemiesBullet.begin();
 
 	while (true) {
 		//移动玩家
@@ -41,33 +39,27 @@ void GameControl::gameLoop() {
 		/**************************************************************************************************************/
 
 		//移动敌方坦克并发射子弹
-		enemy_beg = enemiesTank.begin();
-		blt_beg = enemiesBullet.begin();
-		for (; enemy_beg != enemiesTank.end() && blt_beg != enemiesBullet.end(); ++enemy_beg, ++blt_beg) {
-
-			if ((*enemy_beg)->blood > 0) {
-				(*enemy_beg)->move();
-				hit.canGo((*enemy_beg)->x, (*enemy_beg)->y, (*enemy_beg)->dir);
-				(*enemy_beg)->show();
-				(*blt_beg)->shoot((*enemy_beg)->x, (*enemy_beg)->y, (*enemy_beg)->dir, true);
-			}
-
+		for (auto& enemy : enemies) {
+			enemy.first->move();
+			hit.canGo(enemy.first->x, enemy.first->y, enemy.first->dir);
+			enemy.first->show();
+			enemy.second->shoot(enemy.first->x, enemy.first->y, enemy.first->dir, true);
 		}
 
 		//移动敌方坦克子弹
-		for (auto& bullet : enemiesBullet) {
-			if (bullet->exist) {
-				if (hit.dection(bullet->x, bullet->y, 12, 12)) {
-					bullet->clearOld();
-					bullet->exist = false;
+		for (auto& enemy : enemies) {
+			if (enemy.second->exist) {
+				if (hit.dection(enemy.second->x, enemy.second->y, 12, 12)) {
+					enemy.second->clearOld();
+					enemy.second->exist = false;
 				}
-				bullet->move();
+				enemy.second->move();
 			}
 		}
 		/**************************************************************************************************************/
 
 		//判断子弹与坦克是否相撞
-		hit.focus(playerTank, playerBullet, enemiesTank, enemiesBullet);
+		hit.focus(playerTank, playerBullet, enemies);
 
 		//更新地图
 		map->showMap();
@@ -79,6 +71,6 @@ void GameControl::gameLoop() {
 void GameControl::addEnemy() {
 	std::shared_ptr<TankBase> tank(new EnemyTank(CENTER_X, CENTER_Y, ORDINARY));
 	std::shared_ptr<Bullet> bullet(new Bullet);
-	enemiesTank.push_back(tank);
-	enemiesBullet.push_back(bullet);
+	std::pair<std::shared_ptr<TankBase>, std::shared_ptr<Bullet>> enemy(tank, bullet);
+	enemies.push_back(enemy);
 }

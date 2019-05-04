@@ -55,24 +55,23 @@ void HitDection::canGo(int& x, int& y, Dir d)
 
 int HitDection::focus(std::shared_ptr<TankBase> & pl_tank,
 	std::shared_ptr<Bullet> & pl_blt,
-	std::list<std::shared_ptr<TankBase>> & e_tank,
-	std::list<std::shared_ptr<Bullet>> & e_blt)
+	std::list<std::pair<std::shared_ptr<TankBase>, std::shared_ptr<Bullet>>> & enemies)
 {
 	//判断玩家的子弹是否击中敌人
-	for (auto enemy = e_tank.begin(); enemy != e_tank.end(); ++enemy) {
-		if ((*enemy)->blood > 0 &&
-			isIntersect(pl_blt->x, pl_blt->y, 4, 4, (*enemy)->x, (*enemy)->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
+	for (auto enemy = enemies.begin(); enemy != enemies.end(); enemy++) {
+		if (isIntersect(pl_blt->x, pl_blt->y, 12, 12, enemy->first->x, enemy->first->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
 			//掉血
-			((*enemy)->blood)--;
+			enemy->first->blood--;
 			//清理子弹
 			pl_blt->exist = false;
 			pl_blt->clearOld();
 			//清理敌人
-			if ((*enemy)->blood <= 0) {
-				(*enemy)->clearOld();
-				e_tank.erase(enemy);
+			if (enemy->first->blood <= 0) {
+				enemy->first->clearOld();
+				enemy->second->clearOld();
+				enemies.erase(enemy);
 			}
-			return 1;//击中一名敌人
+			return 1;
 		}
 	}
 	return 0;
