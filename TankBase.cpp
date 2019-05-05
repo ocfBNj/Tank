@@ -3,7 +3,7 @@
 TankBase::TankBase(int _x, int _y, Dir d, int s, int b) :
 	x(_x), y(_y), dir(d),
 	auto_flag(false), speed(s),
-	cur_shape(0), blood(b), steep(0){}
+	cur_shape(0), blood(b), steep(0) {}
 
 void TankBase::changeShape() {
 	if (cur_shape)
@@ -13,11 +13,10 @@ void TankBase::changeShape() {
 }
 
 void TankBase::auto_move() {
-	t.stop();
-	if (auto_flag && t.times() >= 5) {
-		t.start();
-		steep++;
-		if (steep == BLOCK_SIZE) {
+	//t.stop();
+	if (auto_flag/* && t.times() >= 5*/) {
+		//t.start();
+		if (++steep == BLOCK_SIZE) {
 			auto_flag = false;
 			steep = 0;
 		}
@@ -51,7 +50,7 @@ void TankBase::auto_move() {
 		default:
 			break;
 		}
-		
+
 	}
 }
 
