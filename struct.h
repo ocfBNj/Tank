@@ -11,7 +11,6 @@
 //		transparentcolor: 透明色。srcimg 的该颜色并不会复制到 dstimg 上，从而实现透明贴图
 void transparentimage(IMAGE* dstimg, int x, int y, IMAGE* srcimg, UINT transparentcolor);
 
-
 //窗口大小
 #define WINDOW_WIDTH	768
 #define WINDOW_HEIGHT	672

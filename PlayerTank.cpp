@@ -37,7 +37,7 @@ void PlayerTank::move() {
 			dir = RIGHT;
 		}
 	}
-	
+
 	auto_move();
 }
 
