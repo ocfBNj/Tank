@@ -25,7 +25,7 @@ void Map::showMap() {
 					CENTER_X + j * BLOCK_SIZE + BLOCK_SIZE, CENTER_Y + i * BLOCK_SIZE + BLOCK_SIZE);
 				map[i][j] = '0';
 				break;
-			case '1':
+			case '1'://´ó±¾Óª
 				transparentimage(NULL, CENTER_X + j * BLOCK_SIZE, CENTER_Y + i * BLOCK_SIZE, &block_img[NOR_CAMP], 0xffc4c4);
 				break;
 			case '3':

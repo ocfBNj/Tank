@@ -10,7 +10,7 @@ bool HitDection::isIntersect(int x1, int y1, int w1, int h1, int x2, int y2, int
 	return !(x1 + w1 <= x2 || y1 + h1 <= y2 || x2 + w2 <= x1 || y2 + h2 <= y1);
 }
 
-bool HitDection::dection(int x, int y, int w, int h) {
+bool HitDection::blockDection(int x, int y, int w, int h) {
 	bool flag = false;
 	//两个矩形是否相交
 	for (int i = 0; i < 26; i++) {
@@ -53,7 +53,7 @@ void HitDection::canGo(std::shared_ptr<TankBase> tank)
 	}
 }
 
-void HitDection::player_dection(std::shared_ptr<TankBase> player,
+void HitDection::playerDection(std::shared_ptr<TankBase> player,
 	std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>> & enemies)
 {
 	canGo(player);
@@ -69,7 +69,7 @@ void HitDection::player_dection(std::shared_ptr<TankBase> player,
 	}
 }
 
-void HitDection::enemy_dection(std::shared_ptr<TankBase> enemy, std::shared_ptr<TankBase> player,
+void HitDection::enemyDection(std::shared_ptr<TankBase> enemy, std::shared_ptr<TankBase> player,
 	std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>> & enemies)
 {
 	canGo(enemy);
@@ -98,7 +98,7 @@ void HitDection::enemy_dection(std::shared_ptr<TankBase> enemy, std::shared_ptr<
 	}
 }
 
-int HitDection::focus(std::shared_ptr<TankBase> & pl_tank,
+int HitDection::focus(std::shared_ptr<PlayerTank> & pl_tank,
 	std::shared_ptr<Bullet> & pl_blt,
 	std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>> & enemies)
 {
@@ -116,13 +116,34 @@ int HitDection::focus(std::shared_ptr<TankBase> & pl_tank,
 				enemy->first->clearOld();
 				enemy->second->clearOld();
 				enemies.erase(enemy);
+				return 1;//击中并且死亡
 			}
-			return 1;
+			return 0;//击中但未死亡
 		}
 		//判断敌人的子弹是否击中玩家
 		if (enemy->second->exist && isIntersect(enemy->second->x, enemy->second->y, 12, 12, pl_tank->x, pl_tank->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
-			return 2;
+			pl_tank->blood--;
+			pl_tank->clearOld();
+			pl_blt->exist = false;
+			pl_blt->clearOld();
+			if (pl_tank->blood <= 0)
+				return 3;//击中并且死亡
+			return 2;//击中但未死亡
 		}
 	}
-	return 0;
+	return -1;
+}
+
+void HitDection::bulletDection(std::shared_ptr<Bullet>& player_bullet,
+	std::shared_ptr<Bullet>& enemy_bullet)
+{
+	if (isIntersect(player_bullet->x, player_bullet->y, 12, 12,
+		enemy_bullet->x, enemy_bullet->y, 12, 12))
+	{
+		player_bullet->exist = false;
+		enemy_bullet->exist = false;
+		player_bullet->clearOld();
+		enemy_bullet->clearOld();
+	}
+
 }

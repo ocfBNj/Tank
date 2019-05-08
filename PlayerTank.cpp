@@ -1,6 +1,6 @@
 #include "PlayerTank.h"
 
-PlayerTank::PlayerTank(int x, int y) :
+PlayerTank::PlayerTank() :
 	TankBase(x, y, UP, 1, 3)
 {
 	//加载图片
@@ -14,7 +14,13 @@ PlayerTank::PlayerTank(int x, int y) :
 	loadimage(&img_player[DOWN][1], _T(".\\res\\image\\0Player\\m0-3-2.gif"));
 
 	//将坦克放在初始位置
-	putimage(x, y, &img_player[dir][cur_shape]);
+	moveToStart();
+	//putimage(x, y, &img_player[dir][cur_shape]);
+}
+
+void PlayerTank::moveToStart() {
+	x = CENTER_X + 8 * BLOCK_SIZE;
+	y = CENTER_Y + 24 * BLOCK_SIZE;
 }
 
 inline
@@ -23,16 +29,13 @@ void PlayerTank::move() {
 		if (GetAsyncKeyState('W') & 0x8000) {
 			auto_flag = true;
 			dir = UP;
-		}
-		else if (GetAsyncKeyState('S') & 0x8000) {
+		} else if (GetAsyncKeyState('S') & 0x8000) {
 			auto_flag = true;
 			dir = DOWN;
-		}
-		else if (GetAsyncKeyState('A') & 0x8000) {
+		} else if (GetAsyncKeyState('A') & 0x8000) {
 			auto_flag = true;
 			dir = LEFT;
-		}
-		else if (GetAsyncKeyState('D') & 0x8000) {
+		} else if (GetAsyncKeyState('D') & 0x8000) {
 			auto_flag = true;
 			dir = RIGHT;
 		}

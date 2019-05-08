@@ -20,7 +20,7 @@ public:
 	void gameLoop();                                      //游戏主循环
 private:
 	std::shared_ptr<Map> map;                             //地图
-	std::shared_ptr<TankBase> playerTank;                 //玩家
+	std::shared_ptr<PlayerTank> playerTank;                 //玩家
 	std::shared_ptr<Bullet> playerBullet;                 //玩家子弹
 	std::list<std::pair<std::shared_ptr<EnemyTank>,       //敌人
 		std::shared_ptr<Bullet>>> enemies;
@@ -28,9 +28,11 @@ private:
 	SoundManager soundManager;                            //管理声音
 	Timer t;
 	size_t enemies_total;                                 //敌方剩余坦克总数
+	size_t cur_enemies_total;                             //当前坦克总数
 
 	void addEnemy();                                      //增加一辆敌方坦克
 	void blast(int x, int y);                             //爆炸特效
+	bool isHaveTank(int x, int y);                          //判断指定区域是否有坦克
 
 	IMAGE bumb_img[3];                                    //爆炸贴图
 	IMAGE temp;                                           //爆炸前该区域的贴图

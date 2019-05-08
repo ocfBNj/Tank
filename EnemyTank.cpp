@@ -1,11 +1,11 @@
 #include "EnemyTank.h"
 
 
-EnemyTank::EnemyTank(int x, int y, EnemyType t) :
-	TankBase(x, y, DOWN, 1, 1), type(t)
+EnemyTank::EnemyTank(int x, int y, EnemyType t, EnemyTarget tar) :
+	TankBase(x, y, DOWN, 1, 1), type(t), target(tar)
 {
-	//普通坦克
-	if (type == ORDINARY) {
+	if (type == ORDINARY)//普通坦克
+	{
 		loadimage(&img_gray[ORDINARY][LEFT][0], _T(".\\res\\image\\gray-tank\\1-1-1.gif"));
 		loadimage(&img_gray[ORDINARY][LEFT][1], _T(".\\res\\image\\gray-tank\\1-1-2.gif"));
 		loadimage(&img_gray[ORDINARY][UP][0], _T(".\\res\\image\\gray-tank\\1-2-1.gif"));
@@ -15,7 +15,9 @@ EnemyTank::EnemyTank(int x, int y, EnemyType t) :
 		loadimage(&img_gray[ORDINARY][DOWN][0], _T(".\\res\\image\\gray-tank\\1-4-1.gif"));
 		loadimage(&img_gray[ORDINARY][DOWN][1], _T(".\\res\\image\\gray-tank\\1-4-2.gif"));
 	}
-	else if (type == TOPSPEED) {
+	else if (type == TOPSPEED)//高速坦克
+	{
+		speed = 2;
 		loadimage(&img_gray[TOPSPEED][LEFT][0], _T(".\\res\\image\\gray-tank\\2-1-1.gif"));
 		loadimage(&img_gray[TOPSPEED][LEFT][1], _T(".\\res\\image\\gray-tank\\2-1-2.gif"));
 		loadimage(&img_gray[TOPSPEED][UP][0], _T(".\\res\\image\\gray-tank\\2-2-1.gif"));
@@ -35,7 +37,8 @@ EnemyTank::EnemyTank(int x, int y, EnemyType t) :
 		loadimage(&img_gray[SPEEDGUN][DOWN][0], _T(".\\res\\image\\gray-tank\\3-4-1.gif"));
 		loadimage(&img_gray[SPEEDGUN][DOWN][1], _T(".\\res\\image\\gray-tank\\3-4-2.gif"));
 	}
-	else if (type == ARMOURED) {
+	else if (type == ARMOURED) {//装甲坦克
+		blood = 3;
 		loadimage(&img_gray[ARMOURED][LEFT][0], _T(".\\res\\image\\gray-tank\\4-1-1.gif"));
 		loadimage(&img_gray[ARMOURED][LEFT][1], _T(".\\res\\image\\gray-tank\\4-1-2.gif"));
 		loadimage(&img_gray[ARMOURED][UP][0], _T(".\\res\\image\\gray-tank\\4-2-1.gif"));
@@ -68,7 +71,7 @@ void EnemyTank::show() {
 void EnemyTank::changeDir(int _x, int _y) {
 	dir_timer.stop();
 	if (dir_timer.times() >= 1000) {
-		if (_x < x) {//玩家在敌方坦克的左边
+		if (_x < x) {//目标在敌方坦克的左边
 			if (_y < y) {//左上
 				if (rand() % 2)	dir = UP;
 				else dir = LEFT;
@@ -88,8 +91,16 @@ void EnemyTank::changeDir(int _x, int _y) {
 				else dir = RIGHT;
 			}
 		}
-
-
 		dir_timer.start();
 	}
+}
+
+void EnemyTank::changeDirToPlayer(int _x, int _y) {
+	changeDir(_x, _y);
+}
+
+void EnemyTank::changeDirToCamp() {
+	int camp_x = CENTER_X + 13 * BLOCK_SIZE;
+	int camp_y = CENTER_Y + 25 * BLOCK_SIZE;
+	changeDir(camp_x, camp_y);
 }
