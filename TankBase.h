@@ -7,14 +7,14 @@ class TankBase {
 public:
 	TankBase(int _x, int _y, Dir d, int s, int b);
 	virtual ~TankBase() = default;
-	virtual void move() = 0;          //坦克移动
-	virtual void show() = 0;          //显示坦克
 	int getX() const;
 	int getY() const;
 	Dir getDir() const;
 	void adjust();                    //碰撞后调整位置
-	bool isMoving();
-
+	bool isMoving();                  //自动移动是否开启
+	void died();                      //死亡后处理残留图片
+	void disBlood();                  //掉一点血
+	bool haveDied();                  //死亡
 protected:
 	int x, y;                         //坦克（左上角）坐标
 	Dir dir;                          //方向
@@ -26,7 +26,7 @@ protected:
 
 	void changeShape();               //切换造型
 	void autoMove();                  //开启自动移动
-	void stopMove();
+	void stopMove();                  //停止自动移动
 	void clearOld() const;            //清理旧图
 };
 

@@ -1,5 +1,6 @@
 #include "HitDection.h"
 
+
 HitDection::HitDection() :
 	map_x(0), map_y(0) {}
 
@@ -36,6 +37,58 @@ void HitDection::hitWall(Bullet & blt, Map & map) {
 				map.adjust(i, j);
 				blt.adjust();
 			}
+		}
+	}
+}
+
+void HitDection::hitTank(TankBase & tank1, TankBase & tank2) {
+	if (isIntersect(tank1.getX(), tank1.getY(), BLOCK_SIZE * 2, BLOCK_SIZE * 2,
+		tank2.getX(), tank2.getY(), BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
+		tank1.adjust();
+		return;
+	}
+}
+
+void HitDection::focusTank(TankBase & pl_tank, Bullet & pl_blt,
+	std::list<EnemyTank> & enemies_tank, std::list<Bullet> & enemies_blt) {
+
+	auto enemy = enemies_tank.begin();
+	auto blt = enemies_blt.begin();
+	//判断玩家子弹是否击中敌人
+	if (pl_blt.isExist()) {
+		for (enemy = enemies_tank.begin(), blt = enemies_blt.begin(); 
+			enemy != enemies_tank.end() && blt != enemies_blt.end(); enemy++, blt++) {
+
+			if (isIntersect(pl_blt.getX(), pl_blt.getY(), BULLET_SIZE, BULLET_SIZE,
+				enemy->getX(), enemy->getY(), BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
+
+				pl_blt.adjust();
+				enemy->disBlood();
+
+				if (enemy->haveDied()) {
+					enemy->died();
+					blt->adjust();
+					enemies_blt.erase(blt);
+					enemies_tank.erase(enemy);
+				}
+				break;
+			}
+		}
+	}
+
+	//判断敌人子弹是否击中玩家
+	for (enemy = enemies_tank.begin(), blt = enemies_blt.begin();
+		enemy != enemies_tank.end() && blt != enemies_blt.end(); enemy++, blt++) {
+
+		if (blt->isExist() && isIntersect(blt->getX(), blt->getY(), BULLET_SIZE, BULLET_SIZE,
+			pl_tank.getX(), pl_tank.getY(), BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
+
+			blt->adjust();
+			pl_tank.disBlood();
+			if (pl_tank.haveDied()) {
+				pl_tank.died();
+			}
+			break;
 		}
 	}
 }

@@ -22,7 +22,7 @@ void PlayerTank::moveToStart() {
 	y = CENTER_Y + 24 * BLOCK_SIZE;
 }
 
-inline void PlayerTank::move() {
+void PlayerTank::move() {
 	changeShape();
 	if (flag_move == false) {
 		if (GetAsyncKeyState('W') & 0x8000) {
@@ -44,7 +44,6 @@ inline void PlayerTank::move() {
 
 }
 
-inline
 void PlayerTank::show() {
 	transparentimage(NULL, x, y, &img_player[dir][cur_shape], 0xffc4c4);
 }

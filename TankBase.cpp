@@ -30,6 +30,18 @@ bool TankBase::isMoving() {
 	return flag_move;
 }
 
+void TankBase::died() {
+	clearOld();
+}
+
+void TankBase::disBlood() {
+	cur_blood--;
+}
+
+bool TankBase::haveDied() {
+	return !cur_blood;
+}
+
 void TankBase::changeShape() {
 	if (cur_shape)
 		cur_shape = 0;

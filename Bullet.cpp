@@ -17,7 +17,9 @@ void Bullet::shoot(const TankBase& tank, bool is_enemy) {
 	if (exist) return; //子弹已经存在
 
 	//按下空格或是敌人, 发射子弹
-	if (GetAsyncKeyState(' ') & 0x8000 || is_enemy) {
+	timer_shoot.stop();
+	if (GetAsyncKeyState(' ') & 0x8000 || (is_enemy && timer_shoot.times() >= 2000)) {
+		timer_shoot.start();
 		//根据坦克方向发射子弹
 		switch (tank.getDir()) {
 		case UP:
