@@ -5,7 +5,6 @@ GameControl::GameControl() :
 	playerTank(new PlayerTank),
 	playerBullet(new Bullet), hit(*map),
 	enemies_total(20), cur_enemies_total(0) {
-
 	loadimage(&bumb_img[0], _T(".\\res\\image\\bumb1.gif"));
 	loadimage(&bumb_img[1], _T(".\\res\\image\\bumb2.gif"));
 	loadimage(&bumb_img[2], _T(".\\res\\image\\bumb3.gif"));
@@ -29,15 +28,15 @@ void GameControl::gameLoop() {
 
 		//判断子弹与坦克是否相撞
 		auto ret = hit.focus(playerTank, playerBullet, enemies);
-		if (ret == 1) {//子弹击败敌人
+		if (ret == 1) {            //子弹击败敌人
 			soundManager.playMusic(ENEMY_DIE);
 			enemies_total--;
 			cur_enemies_total--;
-		} else if (ret == 0) {//子弹击中敌人
+		} else if (ret == 0) {     //子弹击中敌人
 			soundManager.playMusic(BIN);
-		} else if (ret == 2) {//玩家被击中
+		} else if (ret == 2) {     //玩家被击中
 			playerTank->moveToStart();
-		} else if (ret == 3) {//玩家被击败
+		} else if (ret == 3) {     //玩家被击败
 			playerTank->clearOld();
 			FlushBatchDraw();
 			soundManager.playMusic(PLAYER_DIE);
