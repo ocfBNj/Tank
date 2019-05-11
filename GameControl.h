@@ -1,43 +1,24 @@
-#pragma once
+#ifndef _GAME_CONTROL_
+#define _GAME_CONTROL_
 
 #include <graphics.h>
-#include <memory>
-#include <list>
-#include <thread>
-#include <iterator>
 #include "struct.h"
 #include "Map.h"
 #include "PlayerTank.h"
-#include "EnemyTank.h"
 #include "Bullet.h"
 #include "HitDection.h"
-#include "SoundManager.h"
-#include "Timer.h"
 
 class GameControl {
 public:
 	GameControl();
-	void gameLoop();                                      //游戏主循环
+	void gameLoop();                     //游戏主循环
 private:
-	std::shared_ptr<Map> map;                             //地图
-	std::shared_ptr<PlayerTank> playerTank;                 //玩家
-	std::shared_ptr<Bullet> playerBullet;                 //玩家子弹
-	std::list<std::pair<std::shared_ptr<EnemyTank>,       //敌人
-		std::shared_ptr<Bullet>>> enemies;
-	HitDection hit;                                       //碰撞检测
-	SoundManager soundManager;                            //管理声音
-	Timer t;
-	size_t enemies_total;                                 //敌方剩余坦克总数
-	size_t cur_enemies_total;                             //当前坦克总数
+	Map map;                             //地图
+	HitDection hit;                      //碰撞检测
+	PlayerTank player;                   //玩家
+	Bullet bullet_player;                //玩家子弹
 
-	void addEnemy();                                      //增加一辆敌方坦克
-	void blast(int x, int y);                             //爆炸特效
-	bool isHaveTank(int x, int y);                         //判断指定区域是否有坦克
-	void controlPlayer();
-	void controlEnemies();
-	void movePlayerBullet();
-
-	IMAGE bumb_img[3];                                    //爆炸贴图
-	IMAGE temp;                                           //爆炸前该区域的贴图
-	Timer bumb_timer;                                     //爆炸时间
+	void updatePlayer();
 };
+
+#endif // !_GAME_CONTROL_

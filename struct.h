@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _STRUCT_H_
+#define _STRUCT_H_
 
 #include <graphics.h>
 #pragma comment(lib, "MSIMG32.LIB")
@@ -31,7 +32,12 @@ void transparentimage(IMAGE* dstimg, int x, int y, IMAGE* srcimg, UINT transpare
 //方块大小
 #define BLOCK_SIZE      24
 
+//子弹大小
+#define BULLET_SIZE     12
+
 //方向
 enum Dir {
 	LEFT, UP, RIGHT, DOWN
 };
+
+#endif // !_STRUCT_H_

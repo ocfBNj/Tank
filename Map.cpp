@@ -1,6 +1,6 @@
 #include "Map.h"
 
-Map::Map() {
+Map::Map() : need_update(true) {
 	loadimage(&block_img[WALL], _T(".\\res\\image\\wall.gif"));
 	loadimage(&block_img[STONE], _T(".\\res\\image\\stone.gif"));
 	loadimage(&block_img[NOR_CAMP], _T(".\\res\\image\\camp0.gif"));
@@ -38,4 +38,15 @@ void Map::showMap() {
 			}
 		}
 	}
+	need_update = false;
+}
+
+void Map::adjust(int i, int j) {
+	if (map[i][j] == '3') map[i][j] = 100;
+	need_update = true;
+}
+
+void Map::update() {
+	if (need_update)
+		showMap();
 }

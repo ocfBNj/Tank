@@ -9,56 +9,51 @@ Bullet::Bullet() :
 	loadimage(&img_bullet[DOWN], _T(".\\res\\image\\bullet-3.gif"));
 }
 
-inline
-void Bullet::clearOld() {
-	clearrectangle(x, y, x + 12, y + 12);//清除原位置
+inline void Bullet::clearOld() const {
+	clearrectangle(x, y, x + BULLET_SIZE, y + BULLET_SIZE);
 }
 
-bool Bullet::shoot(int _x, int _y, Dir d, bool b) {
-	//子弹已经存在
-	if (exist)return false;
+void Bullet::shoot(const TankBase& tank, bool is_enemy) {
+	if (exist) return; //子弹已经存在
 
 	//按下空格或是敌人, 发射子弹
-	if (GetAsyncKeyState(' ') & 0x8000 || b) {
-		switch (d)//根据坦克方向发射子弹
-		{
+	if (GetAsyncKeyState(' ') & 0x8000 || is_enemy) {
+		//根据坦克方向发射子弹
+		switch (tank.getDir()) {
 		case UP:
-			x = _x + 18;
-			y = _y + 2;
+			x = tank.getX() + 18;
+			y = tank.getY() + 2;
 			break;
 		case DOWN:
-			x = _x + 18;
-			y = _y + BLOCK_SIZE;
+			x = tank.getX() + 18;
+			y = tank.getY() + BLOCK_SIZE;
 			break;
 		case LEFT:
-			x = _x + 2;
-			y = _y + 20;
+			x = tank.getX() + 2;
+			y = tank.getY() + 20;
 			break;
 		case RIGHT:
-			x = _x + BLOCK_SIZE;
-			y = _y + 20;
+			x = tank.getX() + BLOCK_SIZE;
+			y = tank.getY() + 20;
 			break;
 		default:
 			break;
 		}
-		dir = d;           //子弹方向与发射子弹时坦克方向一致
-		exist = true;      //子弹存在
-		return true;
+		dir = tank.getDir(); //子弹方向与发射子弹时坦克方向一致
+		exist = true;
 	}
-	return false;
 }
 
 bool Bullet::move() {
 	//子弹不存在
-	if (!exist)
-		return false;
+	if (!exist)	return false;
 
-	clearOld();//清理旧位置图
+	clearOld();
 	switch (dir) {
 	case UP:
 		//判断是否碰到边界
 		if (y - 4 <= CENTER_Y) {
-			exist = false;//爆炸
+			exist = false;
 			return true;
 		}
 		y -= speed;
@@ -89,4 +84,21 @@ bool Bullet::move() {
 	}
 	transparentimage(NULL, x, y, &img_bullet[dir], 0xffc4c4);
 	return false;
+}
+
+bool Bullet::isExist() const {
+	return exist;
+}
+
+int Bullet::getX() const{
+	return x;
+}
+
+int Bullet::getY() const {
+	return y;
+}
+
+void Bullet::adjust() {
+	clearOld();
+	exist = false;
 }

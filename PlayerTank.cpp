@@ -1,8 +1,7 @@
 #include "PlayerTank.h"
 
 PlayerTank::PlayerTank() :
-	TankBase(x, y, UP, 1, 3)
-{
+	TankBase(x, y, UP, 1, 3) {
 	//º”‘ÿÕº∆¨
 	loadimage(&img_player[LEFT][0], _T(".\\res\\image\\0Player\\m0-0-1.gif"));
 	loadimage(&img_player[LEFT][1], _T(".\\res\\image\\0Player\\m0-0-2.gif"));
@@ -23,29 +22,29 @@ void PlayerTank::moveToStart() {
 	y = CENTER_Y + 24 * BLOCK_SIZE;
 }
 
-inline
-void PlayerTank::move() {
-	if (auto_flag == false) {
+inline void PlayerTank::move() {
+	changeShape();
+	if (flag_move == false) {
 		if (GetAsyncKeyState('W') & 0x8000) {
-			auto_flag = true;
+			flag_move = true;
 			dir = UP;
 		} else if (GetAsyncKeyState('S') & 0x8000) {
-			auto_flag = true;
+			flag_move = true;
 			dir = DOWN;
 		} else if (GetAsyncKeyState('A') & 0x8000) {
-			auto_flag = true;
+			flag_move = true;
 			dir = LEFT;
 		} else if (GetAsyncKeyState('D') & 0x8000) {
-			auto_flag = true;
+			flag_move = true;
 			dir = RIGHT;
 		}
+	} else {
+		autoMove();
 	}
 
-	auto_move();
 }
 
 inline
 void PlayerTank::show() {
 	transparentimage(NULL, x, y, &img_player[dir][cur_shape], 0xffc4c4);
-	changeShape();
 }

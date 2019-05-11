@@ -8,14 +8,13 @@ enum Block {
 };
 
 class Map {
-	friend class GameControl;
-	friend class HitDection;
-
+public:
 	Map();
-	void loadMap();                  //从文件中导入地图
-	void showMap();                  //显示地图
+	void loadMap();                          //从文件中导入地图
+	void showMap();                          //显示地图
+	void adjust(int i, int j);
+	void update();
 
-	IMAGE block_img[4];              //方块图片
 	char map[26][27] = {
 		"00000000000000000000000000",
 		"00000000000000000000000000",
@@ -44,5 +43,8 @@ class Map {
 		"00000000000319300000000000",
 		"00000000000399300000000000"
 	};
+private:
+	IMAGE block_img[4];                      //方块图片
+	bool need_update;
 };
 

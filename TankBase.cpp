@@ -2,8 +2,33 @@
 
 TankBase::TankBase(int _x, int _y, Dir d, int s, int b) :
 	x(_x), y(_y), dir(d),
-	auto_flag(false), speed(s),
-	cur_shape(0), blood(b), steep(0) {}
+	flag_move(false), speed(s),
+	cur_blood(b), cur_shape(0), steep(0) {}
+
+int TankBase::getX() const {
+	return x;
+}
+
+int TankBase::getY() const {
+	return y;
+}
+
+Dir TankBase::getDir() const {
+	return dir;
+}
+
+void TankBase::adjust() {
+	if (dir == UP)y += speed;
+	else if (dir == DOWN) y -= speed;
+	else if (dir == LEFT) x += speed;
+	else if (dir == RIGHT) x -= speed;
+
+	stopMove();
+}
+
+bool TankBase::isMoving() {
+	return flag_move;
+}
 
 void TankBase::changeShape() {
 	if (cur_shape)
@@ -12,48 +37,52 @@ void TankBase::changeShape() {
 		cur_shape = 1;
 }
 
-void TankBase::auto_move() {
-	//t.stop();
-	if (auto_flag/* && t.times() >= 5*/) {
-		//t.start();
-		if (++steep == BLOCK_SIZE) {
-			auto_flag = false;
-			steep = 0;
-		}
-		switch (dir) {
-		case UP:
-			//碰到边界
-			if (y - speed < CENTER_Y)
-				return;
-			clearOld();//清理残留图片
-			y -= speed;
-			break;
-		case DOWN:
-			if (y + BLOCK_SIZE * 2 + speed > CENTER_Y + CENTER_HEIGHT)
-				return;
-			clearOld();
-			y += speed;
-			break;
-		case LEFT:
-			if (x - speed < CENTER_X)
-				return;
-			clearOld();
-			x -= speed;
-			break;
-		case RIGHT:
-			if (x + BLOCK_SIZE * 2 + speed > CENTER_X + CENTER_WIDTH)
-				return;
-			clearOld();
-			x += speed;
-			break;
-		default:
-			break;
-		}
-
+void TankBase::autoMove() {
+	if (steep == BLOCK_SIZE) {
+		stopMove();
+		return;
 	}
+	clearOld();
+	switch (dir) {
+	case UP:
+		if (y - speed < CENTER_Y) { //碰到边界
+			stopMove();
+			return; 
+		}
+		y -= speed;
+		break;
+	case DOWN:
+		if (y + BLOCK_SIZE * 2 + speed > CENTER_Y + CENTER_HEIGHT) {
+			stopMove();
+			return;
+		}
+		y += speed;
+		break;
+	case LEFT:
+		if (x - speed < CENTER_X) {
+			stopMove();
+			return;
+		}
+		x -= speed;
+		break;
+	case RIGHT:
+		if (x + BLOCK_SIZE * 2 + speed > CENTER_X + CENTER_WIDTH) {
+			stopMove();
+			return;
+		}
+		x += speed;
+		break;
+	default:
+		break;
+	}
+	steep += speed;
 }
 
-inline
-void TankBase::clearOld() {
+inline void TankBase::stopMove() {
+	flag_move = false;
+	steep = 0;
+}
+
+inline void TankBase::clearOld() const {
 	clearrectangle(x, y, x + BLOCK_SIZE * 2 - 1, y + BLOCK_SIZE * 2 - 1);
 }
