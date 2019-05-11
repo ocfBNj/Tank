@@ -8,8 +8,7 @@
 #include "PlayerTank.h"
 #include "EnemyTank.h"
 
-class HitDection
-{
+class HitDection {
 	friend class GameControl;
 public:
 	HitDection(Map&);
@@ -34,7 +33,7 @@ private:
 		std::shared_ptr<Bullet>&,
 		std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>>&);
 	void bulletDection(std::shared_ptr<Bullet>&,   //判断子弹相撞
-		std::shared_ptr<Bullet>&);                         
+		std::shared_ptr<Bullet>&);
 private:
 	Map& map;                                      //地图
 	int map_x, map_y;                              //比较相撞时地图的左上角坐标

@@ -20,8 +20,7 @@ void TankBase::auto_move() {
 			auto_flag = false;
 			steep = 0;
 		}
-		switch (dir)
-		{
+		switch (dir) {
 		case UP:
 			//Åöµ½±ß½ç
 			if (y - speed < CENTER_Y)

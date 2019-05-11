@@ -32,7 +32,10 @@ private:
 
 	void addEnemy();                                      //增加一辆敌方坦克
 	void blast(int x, int y);                             //爆炸特效
-	bool isHaveTank(int x, int y);                          //判断指定区域是否有坦克
+	bool isHaveTank(int x, int y);                         //判断指定区域是否有坦克
+	void controlPlayer();
+	void controlEnemies();
+	void movePlayerBullet();
 
 	IMAGE bumb_img[3];                                    //爆炸贴图
 	IMAGE temp;                                           //爆炸前该区域的贴图

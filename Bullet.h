@@ -25,8 +25,7 @@ class Bullet {
 inline
 Bullet::Bullet() :
 	x(0), y(0), dir(UP),
-	speed(2), exist(false)
-{
+	speed(2), exist(false) {
 	loadimage(&img_bullet[LEFT], _T(".\\res\\image\\bullet-0.gif"));
 	loadimage(&img_bullet[UP], _T(".\\res\\image\\bullet-1.gif"));
 	loadimage(&img_bullet[RIGHT], _T(".\\res\\image\\bullet-2.gif"));

@@ -30,8 +30,7 @@ private:
 
 inline
 SelectPanel::SelectPanel() :
-	arrows_pos(1), cur_shape(0)
-{
+	arrows_pos(1), cur_shape(0) {
 	//加载图片
 	loadimage(&select_img, _T(".\\res\\image\\select_player.gif"));
 	loadimage(&arrows_img[0], _T(".\\res\\image\\0Player\\m0-2-1.gif"));
@@ -75,26 +74,21 @@ int SelectPanel::moveArrows() {
 	static char c = 0;
 	if (_kbhit()) {
 		c = _getch();
-		switch (c) {
-		case 'w':
+		if (c == 'w') {
 			if (arrows_pos > 1 && arrows_pos <= 3) {
 				//清除当前位置的箭头
 				clearrectangle(ARROWS_X, ARROWS_Y + (arrows_pos - 1) * ARROWS_DIS,
 					ARROWS_X + BLOCK_SIZE * 2, ARROWS_Y + (arrows_pos - 1) * ARROWS_DIS + BLOCK_SIZE * 2);
 				--arrows_pos;//向上移动
 			}
-			break;
-		case 's':
+		} else if (c == 's') {
 			if (arrows_pos >= 1 && arrows_pos < 3) {
 				clearrectangle(ARROWS_X, ARROWS_Y + (arrows_pos - 1) * ARROWS_DIS,
 					ARROWS_X + BLOCK_SIZE * 2, ARROWS_Y + (arrows_pos - 1) * ARROWS_DIS + BLOCK_SIZE * 2);
 				++arrows_pos;//向下移动
 			}
-			break;
-		case '\r':
+		} else if (c == '\r') {
 			return arrows_pos;
-		default:
-			break;
 		}
 	}
 	return 0;

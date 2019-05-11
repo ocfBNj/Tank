@@ -31,8 +31,7 @@ bool HitDection::blockDection(int x, int y, int w, int h) {
 	return flag;
 }
 
-void HitDection::canGo(std::shared_ptr<TankBase> tank)
-{
+void HitDection::canGo(std::shared_ptr<TankBase> tank) {
 	//ÅÐ¶ÏÊÇ·ñ×²Ç½
 	for (int i = 0; i < 26; i++) {
 		for (int j = 0; j < 26; j++) {
@@ -54,8 +53,7 @@ void HitDection::canGo(std::shared_ptr<TankBase> tank)
 }
 
 void HitDection::playerDection(std::shared_ptr<TankBase> player,
-	std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>> & enemies)
-{
+	std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>> & enemies) {
 	canGo(player);
 	for (auto& enemy : enemies) {
 		if (isIntersect(player->x, player->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2,
@@ -70,13 +68,11 @@ void HitDection::playerDection(std::shared_ptr<TankBase> player,
 }
 
 void HitDection::enemyDection(std::shared_ptr<TankBase> enemy, std::shared_ptr<TankBase> player,
-	std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>> & enemies)
-{
+	std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>> & enemies) {
 	canGo(enemy);
 	//ÅÐ¶ÏÊÇ·ñ×²µ½Íæ¼Ò
 	if (isIntersect(player->x, player->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2,
-		enemy->x, enemy->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2))
-	{
+		enemy->x, enemy->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
 		if (enemy->dir == UP) enemy->y += enemy->speed;
 		else if (enemy->dir == DOWN)enemy->y -= enemy->speed;
 		else if (enemy->dir == LEFT) enemy->x += enemy->speed;
@@ -87,8 +83,7 @@ void HitDection::enemyDection(std::shared_ptr<TankBase> enemy, std::shared_ptr<T
 	for (auto& tank : enemies) {
 		if (enemy == tank.first) continue;
 		if (isIntersect(enemy->x, enemy->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2,
-			tank.first->x, tank.first->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2))
-		{
+			tank.first->x, tank.first->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
 			if (enemy->dir == UP) enemy->y += enemy->speed;
 			else if (enemy->dir == DOWN)enemy->y -= enemy->speed;
 			else if (enemy->dir == LEFT) enemy->x += enemy->speed;
@@ -100,8 +95,7 @@ void HitDection::enemyDection(std::shared_ptr<TankBase> enemy, std::shared_ptr<T
 
 int HitDection::focus(std::shared_ptr<PlayerTank> & pl_tank,
 	std::shared_ptr<Bullet> & pl_blt,
-	std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>> & enemies)
-{
+	std::list<std::pair<std::shared_ptr<EnemyTank>, std::shared_ptr<Bullet>>> & enemies) {
 
 	for (auto enemy = enemies.begin(); enemy != enemies.end(); enemy++) {
 		//ÅÐ¶ÏÍæ¼ÒµÄ×Óµ¯ÊÇ·ñ»÷ÖÐµÐÈË
@@ -126,6 +120,9 @@ int HitDection::focus(std::shared_ptr<PlayerTank> & pl_tank,
 			pl_tank->clearOld();
 			pl_blt->exist = false;
 			pl_blt->clearOld();
+
+			enemy->second->exist = false;
+			enemy->second->clearOld();
 			if (pl_tank->blood <= 0)
 				return 3;//»÷ÖÐ²¢ÇÒËÀÍö
 			return 2;//»÷ÖÐµ«Î´ËÀÍö
@@ -134,12 +131,10 @@ int HitDection::focus(std::shared_ptr<PlayerTank> & pl_tank,
 	return -1;
 }
 
-void HitDection::bulletDection(std::shared_ptr<Bullet>& player_bullet,
-	std::shared_ptr<Bullet>& enemy_bullet)
-{
+void HitDection::bulletDection(std::shared_ptr<Bullet> & player_bullet,
+	std::shared_ptr<Bullet> & enemy_bullet) {
 	if (isIntersect(player_bullet->x, player_bullet->y, 12, 12,
-		enemy_bullet->x, enemy_bullet->y, 12, 12))
-	{
+		enemy_bullet->x, enemy_bullet->y, 12, 12)) {
 		player_bullet->exist = false;
 		enemy_bullet->exist = false;
 		player_bullet->clearOld();

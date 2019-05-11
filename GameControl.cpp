@@ -4,8 +4,8 @@ GameControl::GameControl() :
 	map(new Map),
 	playerTank(new PlayerTank),
 	playerBullet(new Bullet), hit(*map),
-	enemies_total(20), cur_enemies_total(0)
-{
+	enemies_total(20), cur_enemies_total(0) {
+
 	loadimage(&bumb_img[0], _T(".\\res\\image\\bumb1.gif"));
 	loadimage(&bumb_img[1], _T(".\\res\\image\\bumb2.gif"));
 	loadimage(&bumb_img[2], _T(".\\res\\image\\bumb3.gif"));
@@ -19,65 +19,13 @@ void GameControl::gameLoop() {
 	soundManager.playMusic(START);//播放开始游戏音乐
 
 	while (enemies_total) {
-		//移动玩家
-		playerTank->move();
-		hit.playerDection(playerTank, enemies);
-		playerTank->show();
+		controlPlayer();
+		controlEnemies();
+		movePlayerBullet();
 
-		//移动玩家子弹
-		if (playerBullet->exist) {
-			//检测子弹是否碰到地图
-			if (hit.blockDection(playerBullet->x, playerBullet->y, 12, 12)) {
-				playerBullet->clearOld();
-				playerBullet->exist = false;
-			}
-			//检测子弹是否碰到边缘
-			if (playerBullet->move()) {
-				soundManager.playMusic(BIN);
-				//blast(playerBullet->x, playerBullet->y);
-			}
-
-		}
-
-		//玩家发射子弹
-		if (playerBullet->shoot(playerTank->x, playerTank->y, playerTank->dir, false))
-			soundManager.playMusic(SHOOT);
-
-		
-
-		/**************************************************************************************************************/
-
-		//移动敌方坦克并发射,移动子弹
-		for (auto& enemy : enemies) {
-			//移动子弹
-			if (enemy.second->exist) {
-				if (hit.blockDection(enemy.second->x, enemy.second->y, 12, 12)) {
-					enemy.second->clearOld();
-					enemy.second->exist = false;
-				}
-				enemy.second->move();
-			}
-
-			//改变敌方坦克方向
-			if (enemy.first->target == PLAYER)
-				enemy.first->changeDirToPlayer(playerTank->x, playerTank->y);
-			else if (enemy.first->target == CAMP)
-				enemy.first->changeDirToCamp();
-			enemy.first->move();
-			hit.enemyDection(enemy.first, playerTank, enemies);
-			enemy.first->show();
-			t.stop();
-			if (!enemy.second->exist && t.times() >= 500) {
-				enemy.second->shoot(enemy.first->x, enemy.first->y, enemy.first->dir, true);
-				t.start();
-			}
-			
-		}
-		/**************************************************************************************************************/
 		//判断子弹是否相撞
 		for (auto& enemy : enemies)
 			hit.bulletDection(playerBullet, enemy.second);
-
 
 		//判断子弹与坦克是否相撞
 		auto ret = hit.focus(playerTank, playerBullet, enemies);
@@ -94,6 +42,7 @@ void GameControl::gameLoop() {
 			FlushBatchDraw();
 			soundManager.playMusic(PLAYER_DIE);
 			Sleep(2000);
+			cleardevice();
 			return;
 		}
 
@@ -149,10 +98,66 @@ void GameControl::blast(int x, int y) {
 bool GameControl::isHaveTank(int x, int y) {
 	for (auto& enemy : enemies) {
 		if (hit.isIntersect(enemy.first->x, enemy.first->y, BLOCK_SIZE * 2, BLOCK_SIZE * 2,
-			x, y, BLOCK_SIZE * 2, BLOCK_SIZE * 2))
-		{
+			x, y, BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
 			return true;
 		}
 	}
 	return false;
+}
+
+inline
+void GameControl::controlPlayer() {
+	playerTank->move();
+	hit.playerDection(playerTank, enemies);
+	playerTank->show();
+
+	if (playerBullet->shoot(playerTank->x, playerTank->y, playerTank->dir, false))
+		soundManager.playMusic(SHOOT);
+}
+
+inline
+void GameControl::controlEnemies() {
+	//移动敌方坦克并发射,移动子弹
+	for (auto& enemy : enemies) {
+		//移动子弹
+		if (enemy.second->exist) {
+			if (hit.blockDection(enemy.second->x, enemy.second->y, 12, 12)) {
+				enemy.second->clearOld();
+				enemy.second->exist = false;
+			}
+			enemy.second->move();
+		}
+		//改变敌方坦克方向
+		if (enemy.first->target == PLAYER)
+			enemy.first->changeDirToPlayer(playerTank->x, playerTank->y);
+		else if (enemy.first->target == CAMP)
+			enemy.first->changeDirToCamp();
+
+		enemy.first->move();
+		hit.enemyDection(enemy.first, playerTank, enemies);
+		enemy.first->show();
+		t.stop();
+		if (!enemy.second->exist && t.times() >= 500) {
+			enemy.second->shoot(enemy.first->x, enemy.first->y, enemy.first->dir, true);
+			t.start();
+		}
+
+	}
+}
+
+inline
+void GameControl::movePlayerBullet() {
+	if (playerBullet->exist) {
+		//检测子弹是否碰到地图
+		if (hit.blockDection(playerBullet->x, playerBullet->y, 12, 12)) {
+			playerBullet->clearOld();
+			playerBullet->exist = false;
+		}
+		//检测子弹是否碰到边缘
+		if (playerBullet->move()) {
+			soundManager.playMusic(BIN);
+			//blast(playerBullet->x, playerBullet->y);
+		}
+
+	}
 }

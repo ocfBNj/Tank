@@ -18,8 +18,7 @@ Map::Map() {
 void Map::showMap() {
 	for (int i = 0; i < 26; i++) {
 		for (int j = 0; j < 26; j++) {
-			switch (map[i][j])
-			{
+			switch (map[i][j]) {
 			case 100://±»×Óµ¯×²»÷µÄÇ½
 				solidrectangle(CENTER_X + j * BLOCK_SIZE, CENTER_Y + i * BLOCK_SIZE,
 					CENTER_X + j * BLOCK_SIZE + BLOCK_SIZE, CENTER_Y + i * BLOCK_SIZE + BLOCK_SIZE);

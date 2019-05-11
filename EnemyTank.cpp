@@ -2,8 +2,7 @@
 
 
 EnemyTank::EnemyTank(int x, int y, EnemyType t, EnemyTarget tar) :
-	TankBase(x, y, DOWN, 1, 1), type(t), target(tar)
-{
+	TankBase(x, y, DOWN, 1, 1), type(t), target(tar) {
 	if (type == ORDINARY)//普通坦克
 	{
 		loadimage(&img_gray[ORDINARY][LEFT][0], _T(".\\res\\image\\gray-tank\\1-1-1.gif"));
@@ -14,8 +13,7 @@ EnemyTank::EnemyTank(int x, int y, EnemyType t, EnemyTarget tar) :
 		loadimage(&img_gray[ORDINARY][RIGHT][1], _T(".\\res\\image\\gray-tank\\1-3-2.gif"));
 		loadimage(&img_gray[ORDINARY][DOWN][0], _T(".\\res\\image\\gray-tank\\1-4-1.gif"));
 		loadimage(&img_gray[ORDINARY][DOWN][1], _T(".\\res\\image\\gray-tank\\1-4-2.gif"));
-	}
-	else if (type == TOPSPEED)//高速坦克
+	} else if (type == TOPSPEED)//高速坦克
 	{
 		speed = 2;
 		loadimage(&img_gray[TOPSPEED][LEFT][0], _T(".\\res\\image\\gray-tank\\2-1-1.gif"));
@@ -26,8 +24,7 @@ EnemyTank::EnemyTank(int x, int y, EnemyType t, EnemyTarget tar) :
 		loadimage(&img_gray[TOPSPEED][RIGHT][1], _T(".\\res\\image\\gray-tank\\2-3-2.gif"));
 		loadimage(&img_gray[TOPSPEED][DOWN][0], _T(".\\res\\image\\gray-tank\\2-4-1.gif"));
 		loadimage(&img_gray[TOPSPEED][DOWN][1], _T(".\\res\\image\\gray-tank\\2-4-2.gif"));
-	}
-	else if (type == SPEEDGUN) {
+	} else if (type == SPEEDGUN) {
 		loadimage(&img_gray[SPEEDGUN][LEFT][0], _T(".\\res\\image\\gray-tank\\3-1-1.gif"));
 		loadimage(&img_gray[SPEEDGUN][LEFT][1], _T(".\\res\\image\\gray-tank\\3-1-2.gif"));
 		loadimage(&img_gray[SPEEDGUN][UP][0], _T(".\\res\\image\\gray-tank\\3-2-1.gif"));
@@ -36,8 +33,7 @@ EnemyTank::EnemyTank(int x, int y, EnemyType t, EnemyTarget tar) :
 		loadimage(&img_gray[SPEEDGUN][RIGHT][1], _T(".\\res\\image\\gray-tank\\3-3-2.gif"));
 		loadimage(&img_gray[SPEEDGUN][DOWN][0], _T(".\\res\\image\\gray-tank\\3-4-1.gif"));
 		loadimage(&img_gray[SPEEDGUN][DOWN][1], _T(".\\res\\image\\gray-tank\\3-4-2.gif"));
-	}
-	else if (type == ARMOURED) {//装甲坦克
+	} else if (type == ARMOURED) {//装甲坦克
 		blood = 3;
 		loadimage(&img_gray[ARMOURED][LEFT][0], _T(".\\res\\image\\gray-tank\\4-1-1.gif"));
 		loadimage(&img_gray[ARMOURED][LEFT][1], _T(".\\res\\image\\gray-tank\\4-1-2.gif"));
@@ -75,18 +71,15 @@ void EnemyTank::changeDir(int _x, int _y) {
 			if (_y < y) {//左上
 				if (rand() % 2)	dir = UP;
 				else dir = LEFT;
-			}
-			else {//左下
+			} else {//左下
 				if (rand() % 2)	dir = DOWN;
 				else dir = LEFT;
 			}
-		}
-		else {
+		} else {
 			if (_y < y) {//右上
 				if (rand() % 2)	dir = UP;
 				else dir = RIGHT;
-			}
-			else {//右下
+			} else {//右下
 				if (rand() % 2)	dir = DOWN;
 				else dir = RIGHT;
 			}
