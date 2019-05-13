@@ -4,6 +4,7 @@
 #include <graphics.h>
 #include <list>
 #include <iterator>
+#include <ctime>
 #include "struct.h"
 #include "Map.h"
 #include "PlayerTank.h"
@@ -23,10 +24,12 @@ private:
 	Bullet blt_player;                   //玩家子弹
 	std::list<EnemyTank> enemies;        //敌人列表
 	std::list<Bullet> blts_enemies;      //敌人子弹列表
+	size_t enemies_total;                //敌方坦克总数
+	size_t born_total;                   //已经出生的地方坦克总数
 
-	void updatePlayer();
-	void updataEnemies();
-	void addEnemy();
+	void updatePlayer();                 //更新玩家数据
+	void updataEnemies();                //更新敌人数据
+	void addEnemy();                     //增加一辆地方坦克
 };
 
 #endif // !_GAME_CONTROL_

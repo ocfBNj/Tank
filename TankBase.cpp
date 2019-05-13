@@ -26,11 +26,11 @@ void TankBase::adjust() {
 	stopMove();
 }
 
-bool TankBase::isMoving() {
+bool TankBase::isMoving() const {
 	return flag_move;
 }
 
-void TankBase::died() {
+void TankBase::die() const{
 	clearOld();
 }
 
@@ -38,7 +38,7 @@ void TankBase::disBlood() {
 	cur_blood--;
 }
 
-bool TankBase::haveDied() {
+bool TankBase::isDied() const {
 	return !cur_blood;
 }
 

@@ -3,6 +3,7 @@
 #include "GameControl.h"
 
 int main(void) {
+	srand((unsigned)time(NULL));
 	initgraph(WINDOW_WIDTH, WINDOW_HEIGHT);
 	BeginBatchDraw();
 

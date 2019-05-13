@@ -4,6 +4,7 @@
 #include "struct.h"
 #include "TankBase.h"
 #include "Timer.h"
+//#include "Sound.h"
 
 class TankBase;
 class Bullet {
@@ -14,7 +15,7 @@ public:
 	bool isExist() const;                            //获得子弹存在信息
 	int getX() const;
 	int getY() const;
-	void adjust();                                   //碰撞和清理子弹
+	void adjust();                                   //碰撞后清理子弹
 private:
 	IMAGE img_bullet[4];                             //子弹图片
 	int x, y;                                        //子弹（左上角）坐标

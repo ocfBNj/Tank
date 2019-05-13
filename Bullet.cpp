@@ -43,6 +43,9 @@ void Bullet::shoot(const TankBase& tank, bool is_enemy) {
 		}
 		dir = tank.getDir(); //子弹方向与发射子弹时坦克方向一致
 		exist = true;
+		if (!is_enemy) {
+			//Sound::play(SHOOT);
+		}
 	}
 }
 

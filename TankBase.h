@@ -11,10 +11,10 @@ public:
 	int getY() const;
 	Dir getDir() const;
 	void adjust();                    //碰撞后调整位置
-	bool isMoving();                  //自动移动是否开启
-	void died();                      //死亡后处理残留图片
+	bool isMoving() const;            //自动移动是否开启
+	void die() const;                 //死亡后处理残留图片
 	void disBlood();                  //掉一点血
-	bool haveDied();                  //死亡
+	bool isDied() const;              //死亡
 protected:
 	int x, y;                         //坦克（左上角）坐标
 	Dir dir;                          //方向

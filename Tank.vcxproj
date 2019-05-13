@@ -131,6 +131,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="PlayerTank.cpp" />
     <ClCompile Include="SelectPanel.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="struct.cpp" />
     <ClCompile Include="TankBase.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="PlayerTank.h" />
     <ClInclude Include="SelectPanel.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="TankBase.h" />
     <ClInclude Include="Timer.h" />
