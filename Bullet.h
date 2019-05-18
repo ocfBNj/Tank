@@ -4,7 +4,7 @@
 #include "struct.h"
 #include "TankBase.h"
 #include "Timer.h"
-//#include "Sound.h"
+#include "Sound.h"
 
 class TankBase;
 class Bullet {

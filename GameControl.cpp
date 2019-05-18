@@ -3,49 +3,54 @@
 GameControl::GameControl() : enemies_total(20), born_total(0) {}
 
 void GameControl::gameLoop() {
-	map.showMap();
-	addEnemy();
-	enemies.push_back(EnemyTank(CENTER_X + BLOCK_SIZE * 6, CENTER_Y, ARMOURED, PLAYER));
-	blts_enemies.push_back(Bullet());
-	while (true) {
+	initGame();
+	while ((enemies.size() != 0) || (born_total != enemies_total)) {
 		updatePlayer();
 		updataEnemies();
 
 		hit.focusBullet(player, blt_player, enemies, blts_enemies);
 		map.update();
+		if (enemies.size() < 3) addEnemy();
 		FlushBatchDraw();
-		Sleep(5);
+		Sleep(6);
 	}
 }
 
-inline void GameControl::updatePlayer() {
-	//更新坦克
+void GameControl::initGame() {
+	map.showMap();
+	Sound::play(START);
+}
+
+void GameControl::updatePlayer() {
+	//更新玩家坦克
 	player.move();
-	if (player.isMoving()) {
+	//Sound::pauseMove(player.moveStatus());
+	if (player.moveStatus()) {
 		hit.noKnockWall(player, map);//坦克与墙碰撞检测
 		//坦克与坦克之间碰撞检测
-		for (auto& enemy : enemies) {
+		for (auto &enemy : enemies) {
 			hit.impactTank(player, enemy);
 		}
 	}
+
 	player.show();
 
 	//更新子弹
 	blt_player.shoot(player, false);
 	if (blt_player.isExist()) {
 		hit.hitWall(blt_player, map);
-		blt_player.move();
+		if (blt_player.move()) Sound::play(BIN);
 	}
 
 }
 
-inline void GameControl::updataEnemies() {
+void GameControl::updataEnemies() {
 	auto enemy = enemies.begin();
 	auto blt = blts_enemies.begin();
 	for (; enemy != enemies.end() && blt != blts_enemies.end(); enemy++, blt++) {
-		//更新坦克
+		//更新敌方坦克
 		enemy->move(player.getX(), player.getY());
-		if (enemy->isMoving()) {
+		if (enemy->moveStatus()) {
 			hit.noKnockWall(*enemy, map);
 			hit.impactTank(*enemy, player);
 
@@ -66,8 +71,37 @@ inline void GameControl::updataEnemies() {
 }
 
 void GameControl::addEnemy() {
-	enemies.push_back(EnemyTank(CENTER_X, CENTER_Y, ARMOURED, PLAYER));
+	if (born_total == enemies_total) return;
+	auto ret = makeNewPos();
+	if (std::get<0>(ret) == -1 && std::get<1>(ret) == -1) 
+		return; //产生失败
+
+	unsigned type = rand() % 4;
+	unsigned des = rand() & 2;
+	enemies.push_back(EnemyTank(std::get<0>(ret), std::get<1>(ret),
+		static_cast<EnemyType>(type), static_cast<EnemyTarget>(des)));
 	blts_enemies.push_back(Bullet());
 
 	born_total++;
+
+}
+
+std::tuple<int, int> GameControl::makeNewPos() {
+	int id = rand() % 3;
+	int x = CENTER_X + id * 12 * BLOCK_SIZE;
+	int y = CENTER_Y;
+
+	//判断该区域是否已有坦克
+	for (auto &tank : enemies) {
+		if (hit.isIntersect(tank.getX(), tank.getY(), TANK_SIZE, TANK_SIZE,
+			x, y, TANK_SIZE, TANK_SIZE)) {
+			return std::tuple<int, int>{-1, -1};
+		}
+	}
+	if (hit.isIntersect(player.getX(), player.getY(), TANK_SIZE, TANK_SIZE,
+		x, y, TANK_SIZE, TANK_SIZE)) {
+		return std::tuple<int, int>{-1, -1};
+	}
+
+	return std::tuple<int, int>{x, y};
 }

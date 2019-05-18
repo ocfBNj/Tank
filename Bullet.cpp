@@ -13,7 +13,7 @@ inline void Bullet::clearOld() const {
 	clearrectangle(x, y, x + BULLET_SIZE, y + BULLET_SIZE);
 }
 
-void Bullet::shoot(const TankBase& tank, bool is_enemy) {
+void Bullet::shoot(const TankBase & tank, bool is_enemy) {
 	if (exist) return; //子弹已经存在
 
 	//按下空格或是敌人, 发射子弹
@@ -43,6 +43,7 @@ void Bullet::shoot(const TankBase& tank, bool is_enemy) {
 		}
 		dir = tank.getDir(); //子弹方向与发射子弹时坦克方向一致
 		exist = true;
+		if (!is_enemy) Sound::play(SHOOT);
 		if (!is_enemy) {
 			//Sound::play(SHOOT);
 		}
@@ -95,7 +96,7 @@ bool Bullet::isExist() const {
 	return exist;
 }
 
-int Bullet::getX() const{
+int Bullet::getX() const {
 	return x;
 }
 

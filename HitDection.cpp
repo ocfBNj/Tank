@@ -4,6 +4,11 @@ bool HitDection::isIntersect(int x1, int y1, int w1, int h1, int x2, int y2, int
 	return !(x1 + w1 <= x2 || y1 + h1 <= y2 || x2 + w2 <= x1 || y2 + h2 <= y1);
 }
 
+bool HitDection::isIntersect(TankBase & tank1, TankBase & tank2) {
+	return isIntersect(tank1.getX(), tank1.getY(), BLOCK_SIZE * 2, BLOCK_SIZE * 2,
+		tank2.getX(), tank2.getY(), BLOCK_SIZE * 2, BLOCK_SIZE * 2);
+}
+
 void HitDection::noKnockWall(TankBase & tank, Map & map) {
 	//ÅÐ¶ÏÊÇ·ñ×²Ç½
 	for (int i = 0; i < 26; i++) {
@@ -38,8 +43,7 @@ void HitDection::hitWall(Bullet & blt, Map & map) {
 }
 
 void HitDection::impactTank(TankBase & tank1, TankBase & tank2) {
-	if (isIntersect(tank1.getX(), tank1.getY(), BLOCK_SIZE * 2, BLOCK_SIZE * 2,
-		tank2.getX(), tank2.getY(), BLOCK_SIZE * 2, BLOCK_SIZE * 2)) {
+	if (isIntersect(tank1, tank2)) {
 		tank1.adjust();
 		return;
 	}
@@ -60,6 +64,7 @@ void HitDection::focusBullet(TankBase & player, Bullet & pl_blt,
 			enemy->disBlood();
 
 			if (enemy->isDied()) {
+				Sound::play(ENEMY_DIE);
 				enemy->die();
 				enemy_blt->adjust();
 				enemies_blt.erase(enemy_blt);
@@ -83,6 +88,8 @@ void HitDection::focusBullet(TankBase & player, Bullet & pl_blt,
 
 			enemy_blt->adjust();
 			player.disBlood();
+			dynamic_cast<PlayerTank &>(player).moveToStart();
+			Sound::play(PLAYER_DIE);
 			if (player.isDied()) {
 				player.die();
 			}

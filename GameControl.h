@@ -5,6 +5,7 @@
 #include <list>
 #include <iterator>
 #include <ctime>
+#include <tuple>
 #include "struct.h"
 #include "Map.h"
 #include "PlayerTank.h"
@@ -12,6 +13,7 @@
 #include "Bullet.h"
 #include "HitDection.h"
 #include "Timer.h"
+#include "Sound.h"
 
 class GameControl {
 public:
@@ -27,9 +29,11 @@ private:
 	size_t enemies_total;                //敌方坦克总数
 	size_t born_total;                   //已经出生的地方坦克总数
 
+	void initGame();                     //初始化游戏内容
 	void updatePlayer();                 //更新玩家数据
 	void updataEnemies();                //更新敌人数据
 	void addEnemy();                     //增加一辆地方坦克
+	std::tuple<int, int> makeNewPos();   //产生一个地方坦克出现的位置
 };
 
 #endif // !_GAME_CONTROL_

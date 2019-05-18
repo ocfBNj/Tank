@@ -2,6 +2,7 @@
 
 #include <conio.h>
 #include "TankBase.h"
+#include "Sound.h"
 
 class PlayerTank : public TankBase {
 public:

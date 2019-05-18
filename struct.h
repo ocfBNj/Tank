@@ -10,7 +10,7 @@
 //		x, y:	目标贴图位置
 //		srcimg: 源 IMAGE 对象指针。NULL 表示默认窗体
 //		transparentcolor: 透明色。srcimg 的该颜色并不会复制到 dstimg 上，从而实现透明贴图
-void transparentimage(IMAGE* dstimg, int x, int y, IMAGE* srcimg, UINT transparentcolor);
+void transparentimage(IMAGE *dstimg, int x, int y, IMAGE *srcimg, UINT transparentcolor);
 
 //窗口大小
 #define WINDOW_WIDTH	768
@@ -31,6 +31,9 @@ void transparentimage(IMAGE* dstimg, int x, int y, IMAGE* srcimg, UINT transpare
 
 //方块大小
 #define BLOCK_SIZE      24
+
+//坦克大小
+#define TANK_SIZE       48
 
 //子弹大小
 #define BULLET_SIZE     12

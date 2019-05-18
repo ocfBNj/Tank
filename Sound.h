@@ -13,7 +13,9 @@ enum Music {
 
 class Sound {
 public:
+	static void init();
 	static void play(Music m);
+	static void pauseMove(bool status);
 };
 
 

@@ -18,6 +18,7 @@ PlayerTank::PlayerTank() :
 }
 
 void PlayerTank::moveToStart() {
+	clearOld();
 	x = CENTER_X + 8 * BLOCK_SIZE;
 	y = CENTER_Y + 24 * BLOCK_SIZE;
 }

@@ -26,11 +26,11 @@ void TankBase::adjust() {
 	stopMove();
 }
 
-bool TankBase::isMoving() const {
+bool TankBase::moveStatus() const {
 	return flag_move;
 }
 
-void TankBase::die() const{
+void TankBase::die() const {
 	clearOld();
 }
 
@@ -59,7 +59,7 @@ void TankBase::autoMove() {
 	case UP:
 		if (y - speed < CENTER_Y) { //Åöµ½±ß½ç
 			stopMove();
-			return; 
+			return;
 		}
 		y -= speed;
 		break;

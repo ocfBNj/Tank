@@ -1,6 +1,6 @@
 #include "struct.h"
 
-void transparentimage(IMAGE* dstimg, int x, int y, IMAGE* srcimg, UINT transparentcolor) {
+void transparentimage(IMAGE *dstimg, int x, int y, IMAGE *srcimg, UINT transparentcolor) {
 	HDC dstDC = GetImageHDC(dstimg);
 	HDC srcDC = GetImageHDC(srcimg);
 	int w = srcimg->getwidth();
