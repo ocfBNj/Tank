@@ -9,6 +9,8 @@ Bullet::Bullet() :
 	loadimage(&img_bullet[UP], _T(".\\res\\image\\bullet-1.gif"));
 	loadimage(&img_bullet[RIGHT], _T(".\\res\\image\\bullet-2.gif"));
 	loadimage(&img_bullet[DOWN], _T(".\\res\\image\\bullet-3.gif"));
+
+	timer_shoot.setDifTime(1000); //敌人1秒射击一次
 }
 
 inline void Bullet::clearOld() const {
@@ -19,9 +21,7 @@ void Bullet::shoot(const TankBase& tank, bool is_enemy) {
 	if (exist) return; //子弹已经存在
 
 	//按下J或是敌人, 发射子弹
-	timer_shoot.stop();
-	if ((!is_enemy && GetAsyncKeyState('J') & 0x8000) || (is_enemy && timer_shoot.times() >= 2000)) {
-		timer_shoot.start();
+	if ((!is_enemy && GetAsyncKeyState('J') & 0x8000) || (is_enemy && timer_shoot.isTimeOut())) {
 		//根据坦克方向发射子弹
 		switch (tank.getDir()) {
 		case UP:
@@ -57,9 +57,6 @@ void Bullet::shoot(const TankBase& tank, bool is_enemy) {
 
 		exist = true;
 		if (!is_enemy) Sound::play(SHOOT);
-		if (!is_enemy) {
-			//Sound::play(SHOOT);
-		}
 	}
 }
 
@@ -145,5 +142,13 @@ Dir Bullet::getDir() const {
 
 void Bullet::adjust() {
 	clearOld();
+	/*if (dir == DOWN || dir == RIGHT) {
+		effect.makeEffects(real_x, real_y);
+	} else if(dir == UP){
+		effect.makeEffects(real_x, real_y - BLOCK_SIZE);
+	} else if (dir == LEFT) {
+		effect.makeEffects(real_x - BLOCK_SIZE, real_y);
+	}*/
+	
 	exist = false;
 }

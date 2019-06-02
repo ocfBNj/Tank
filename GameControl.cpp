@@ -9,12 +9,13 @@ void GameControl::gameLoop() {
 		updatePlayer();
 		updataEnemies();
 
+		//检测子弹是否击中坦克
 		hit.focusBullet(player, blt_player, enemies, blts_enemies);
 
 		//map.setNeedUpdate(true);
 		map.update();
 
-		if (enemies.size() < 3) addEnemy(); //每次生成3辆坦克
+		if (enemies.size() < 6) addEnemy(); //每次生成3辆坦克
 
 		FlushBatchDraw();
 		Sleep(6);

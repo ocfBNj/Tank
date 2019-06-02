@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Effects.cpp" />
     <ClCompile Include="EnemyTank.cpp" />
     <ClCompile Include="GameControl.cpp" />
     <ClCompile Include="HitDection.cpp" />
@@ -138,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Effects.h" />
     <ClInclude Include="EnemyTank.h" />
     <ClInclude Include="GameControl.h" />
     <ClInclude Include="HitDection.h" />

@@ -43,6 +43,8 @@ EnemyTank::EnemyTank(int x, int y, EnemyType t, EnemyTarget tar) :
 		loadimage(&img_gray[ARMOURED][DOWN][1], _T(".\\res\\image\\gray-tank\\4-4-2.gif"));
 	}
 
+	timer_move.setDifTime(10);
+	timer_dir.setDifTime(1000);
 }
 
 
@@ -55,10 +57,8 @@ void EnemyTank::move(int _x, int _y) {
 		else if (target == CAMP)
 			changeDirToCamp();
 
-		timer_move.stop();
-		if (timer_move.times() >= 10) {
+		if (timer_move.isTimeOut()) {
 			flag_move = true;
-			timer_move.start();
 		}
 	} else {
 		autoMove();
@@ -70,8 +70,7 @@ void EnemyTank::show() {
 }
 
 void EnemyTank::changeDir(int _x, int _y) {
-	timer_dir.stop();
-	if (timer_dir.times() >= 1000) {
+	if (timer_dir.isTimeOut()) {
 		if (_x < x) {//目标在敌方坦克的左边
 			if (_y < y) {//左上
 				if (rand() % 2)	dir = UP;
@@ -89,7 +88,6 @@ void EnemyTank::changeDir(int _x, int _y) {
 				else dir = RIGHT;
 			}
 		}
-		timer_dir.start();
 	}
 }
 

@@ -5,6 +5,7 @@
 #include "TankBase.h"
 #include "Timer.h"
 #include "Sound.h"
+#include "Effects.h"
 
 class TankBase;
 class Bullet {
@@ -27,6 +28,7 @@ private:
 	int speed;                                       //子弹速度
 	bool exist;                                      //子弹是否存在
 	Timer timer_shoot;                               //敌人发射子弹频率
+	Effects effect;
 
 	void clearOld() const;                           //清理残留贴图
 };
