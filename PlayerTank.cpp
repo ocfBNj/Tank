@@ -1,7 +1,7 @@
 #include "PlayerTank.h"
 
 PlayerTank::PlayerTank() :
-	TankBase(x, y, UP, 1, 3) {
+	TankBase(CENTER_X + 8 * BLOCK_SIZE, CENTER_Y + 24 * BLOCK_SIZE, UP, 1, 3) {
 	//º”‘ÿÕº∆¨
 	loadimage(&img_player[LEFT][0], _T(".\\res\\image\\0Player\\m0-0-1.gif"));
 	loadimage(&img_player[LEFT][1], _T(".\\res\\image\\0Player\\m0-0-2.gif"));
@@ -18,7 +18,7 @@ PlayerTank::PlayerTank() :
 }
 
 void PlayerTank::moveToStart() {
-	//clearOld();
+	clearOld();
 	x = CENTER_X + 8 * BLOCK_SIZE;
 	y = CENTER_Y + 24 * BLOCK_SIZE;
 }
@@ -42,7 +42,6 @@ void PlayerTank::move() {
 	} else {
 		autoMove();
 	}
-
 }
 
 void PlayerTank::show() {

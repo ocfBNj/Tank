@@ -82,7 +82,7 @@ void GameControl::addEnemy() {
 		return; //²úÉúÊ§°Ü
 
 	unsigned type = rand() % 4;
-	unsigned des = rand() & 2;
+	unsigned des = rand() % 2;
 	enemies.push_back(EnemyTank(std::get<0>(ret), std::get<1>(ret),
 		static_cast<EnemyType>(type), static_cast<EnemyTarget>(des)));
 	blts_enemies.push_back(Bullet());
