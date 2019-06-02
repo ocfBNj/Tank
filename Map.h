@@ -10,10 +10,12 @@ enum Block {
 class Map {
 public:
 	Map();
-	void loadMap();                          //从文件中导入地图
-	void showMap();                          //显示地图
-	void adjust(int i, int j);
+	void loadMap();                                  //从文件中导入地图
+	void showMap();                                  //显示地图
+	void adjust(int i, int j);                       //调整地图
+	void adjust(int i, int j, int val);              //调整砖块
 	void update();
+	void setNeedUpdate(bool b);
 
 	char map[26][27] = {
 		"00000000000000000000000000",
@@ -43,8 +45,12 @@ public:
 		"00000000000319300000000000",
 		"00000000000399300000000000"
 	};
+	char cover[26][27][4]{};                         //覆盖标记
 private:
-	IMAGE block_img[4];                      //方块图片
+	IMAGE block_img[4];                              //方块图片
+	IMAGE black;                                     //用于覆盖1/4块砖
 	bool need_update;
+
+	void coverWall(int i, int j);
 };
 

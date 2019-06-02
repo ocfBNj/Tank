@@ -4,13 +4,18 @@ GameControl::GameControl() : enemies_total(20), born_total(0) {}
 
 void GameControl::gameLoop() {
 	initGame();
+	//敌人全部被消灭并且全部出生则游戏胜利
 	while ((enemies.size() != 0) || (born_total != enemies_total)) {
 		updatePlayer();
 		updataEnemies();
 
 		hit.focusBullet(player, blt_player, enemies, blts_enemies);
+
+		//map.setNeedUpdate(true);
 		map.update();
-		if (enemies.size() < 3) addEnemy();
+
+		if (enemies.size() < 3) addEnemy(); //每次生成3辆坦克
+
 		FlushBatchDraw();
 		Sleep(6);
 	}

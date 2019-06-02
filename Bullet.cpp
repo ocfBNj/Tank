@@ -1,7 +1,9 @@
 #include "Bullet.h"
 
 Bullet::Bullet() :
-	x(0), y(0), dir(UP),
+	x(0), y(0),
+	real_x(0), real_y(0),
+	dir(UP),
 	speed(2), exist(false) {
 	loadimage(&img_bullet[LEFT], _T(".\\res\\image\\bullet-0.gif"));
 	loadimage(&img_bullet[UP], _T(".\\res\\image\\bullet-1.gif"));
@@ -13,12 +15,12 @@ inline void Bullet::clearOld() const {
 	clearrectangle(x, y, x + BULLET_SIZE, y + BULLET_SIZE);
 }
 
-void Bullet::shoot(const TankBase & tank, bool is_enemy) {
+void Bullet::shoot(const TankBase& tank, bool is_enemy) {
 	if (exist) return; //子弹已经存在
 
-	//按下空格或是敌人, 发射子弹
+	//按下J或是敌人, 发射子弹
 	timer_shoot.stop();
-	if (GetAsyncKeyState(' ') & 0x8000 || (is_enemy && timer_shoot.times() >= 2000)) {
+	if ((!is_enemy && GetAsyncKeyState('J') & 0x8000) || (is_enemy && timer_shoot.times() >= 2000)) {
 		timer_shoot.start();
 		//根据坦克方向发射子弹
 		switch (tank.getDir()) {
@@ -42,6 +44,17 @@ void Bullet::shoot(const TankBase & tank, bool is_enemy) {
 			break;
 		}
 		dir = tank.getDir(); //子弹方向与发射子弹时坦克方向一致
+		if (dir == UP || dir == LEFT) {
+			real_x = tank.getX();
+			real_y = tank.getY();
+		} else if (dir == RIGHT) {
+			real_x = tank.getX() + TANK_SIZE / 2;
+			real_y = tank.getY();
+		} else if (dir == DOWN) {
+			real_x = tank.getX();
+			real_y = tank.getY() + TANK_SIZE / 2;
+		}
+
 		exist = true;
 		if (!is_enemy) Sound::play(SHOOT);
 		if (!is_enemy) {
@@ -63,6 +76,7 @@ bool Bullet::move() {
 			return true;
 		}
 		y -= speed;
+		real_y -= speed;
 		break;
 	case DOWN:
 		if (y + 16 >= CENTER_Y + CENTER_HEIGHT) {
@@ -70,6 +84,7 @@ bool Bullet::move() {
 			return true;
 		}
 		y += speed;
+		real_y += speed;
 		break;
 	case LEFT:
 		if (x - 4 <= CENTER_X) {
@@ -77,6 +92,7 @@ bool Bullet::move() {
 			return true;
 		}
 		x -= speed;
+		real_x -= speed;
 		break;
 	case RIGHT:
 		if (x + 16 >= CENTER_X + CENTER_WIDTH) {
@@ -84,6 +100,7 @@ bool Bullet::move() {
 			return true;
 		}
 		x += speed;
+		real_x += speed;
 		break;
 	default:
 		break;
@@ -96,12 +113,34 @@ bool Bullet::isExist() const {
 	return exist;
 }
 
-int Bullet::getX() const {
-	return x;
+int Bullet::getRealX() const {
+	return real_x;
 }
 
-int Bullet::getY() const {
-	return y;
+int Bullet::getRealY() const {
+	return real_y;
+}
+
+int Bullet::getHeight() const {
+	if (dir == UP || dir == DOWN) {
+		return BULLET_SIZE;
+	} else {
+		return TANK_SIZE;
+	}
+	return 0;
+}
+
+int Bullet::getWidth() const {
+	if (dir == UP || dir == DOWN) {
+		return TANK_SIZE;
+	} else {
+		return BULLET_SIZE;
+	}
+	return 0;
+}
+
+Dir Bullet::getDir() const {
+	return dir;
 }
 
 void Bullet::adjust() {
